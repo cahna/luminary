@@ -6,22 +6,24 @@ _Luminary_: A visual debugging toolbar for Lapis websites written in Moonscript 
  
 Inspired by CakePHP's debugkit, Django's debug toolbar, and others.
 
+This project is meant to extend @leafo's work developing [Lapis](https://github.com/leafo/lapis) and [Lapis-console](https://github.com/leafo/lapis-console), and to make Lapis & Moonscript more inviting and accessible to a wide range of developers. Lapis-console has been forked, bashed around, and included within this module.
+
 ## Goals ##
 
-1. Provide an intuitive, clean, debug module for moonscript applications. Make something you'd _want_ to use on every Lapis project.
-2. Require minimal configuration: 
-   - require module once (or less, ie: enable via lapis config?)
-   - add within view once (or less?)
-   - allow for further extension with custom panels (maybe later)
-   - Don't be intrusive or behave unexpectedly
-3. Complete goals list
+ 1. Provide an intuitive, clean, debug module for moonscript applications. Make something you'd _want_ to use on every Lapis project.
+ 2. Require minimal configuration: 
+    - require module once (or less, ie: enable via lapis config?)
+    - add within view once (or less?)
+    - allow for further extension with custom panels (maybe later)
+    - Don't be intrusive or behave unexpectedly
+ 3. Complete goals list
 
 ## Feature Requests / To-do List ##
 
-[ ] Add lapis console (_in progress_)
-[ ] Render only from predefined internal IPs
-[ ] Remove bootstrap/jquery/all unnecessary dependencies
-[ ] Write tests
+ - [ ] Add lapis console (_in progress_)
+ - [ ] Render only from predefined internal IPs
+ - [ ] Remove bootstrap/jquery/all unnecessary dependencies
+ - [ ] Write tests
 
 ## Dependencies ##
 
