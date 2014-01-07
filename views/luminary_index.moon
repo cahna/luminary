@@ -2,8 +2,8 @@
 import Widget from require "lapis.html"
 import write from require "pl.pretty"
 
-class LuminaryIndex extends Widget
-  content: =>
+class LuminaryIndex extends require "luminary.views.base"
+  inner_content: =>
     div id: "luminary-nav", class: "pull-right", ->
       ul class: "nav nav-pills nav-stacked", ->
         li class: "luminary-close", ->
@@ -62,5 +62,32 @@ class LuminaryIndex extends Widget
           --@console_content!
           pre "CONSOLE CONTENT HERE"
 
-
+--  console_content: =>
+--    @console_script "lib_codemirror_js"
+--    @console_script "mode_moonscript_js"
+--    @console_script "mode_lua_js"
+--    @console_script "main_js"
+--
+--    @console_style "lib_codemirror_css"
+--    @console_style "theme_moon_css"
+--    @console_style "main_css"
+--
+--
+--  content2: =>
+--    div id: "editor", ->
+--      div class: "editor_top", ->
+--        div class: "buttons_top", ->
+--          button class: "run_btn", "Run (Ctrl+Enter)"
+--          text " "
+--          button class: "clear_btn", "Clear (Ctrl+K)"
+--
+--        div ->
+--          textarea!
+--
+--        div class: "status", "Ready"
+--
+--      div class: "log"
+--      div class: "footer", "lapis_console 0.0.1"
+----    script type: "text/javascript", ->
+----      raw [[$(document).ready(function(){ _editor = new Lapis.Editor('#editor'); });]]
 

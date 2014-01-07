@@ -19,16 +19,19 @@
 
 lapis = require "lapis"
 console = require "luminary.console"
+js = require "helpers.javascript"
 
 import Widget from require "lapis.html"
 import write from require "pl.pretty"
 
 class LuminaryHelper extends lapis.Application
-  views_prefix: "luminary.views."
-  layout: "base"
-
   @path: "/luminary"
   @name: "luminary_"
+
+  @before_filter =>
+    -- Cache js for later rendering in the layout
+    unless @JsHelper and type @JsHelper == "function"
+      @JsHelper = js!
 
   -- A path is needed for the console's AJAX to poke
   [console: "/console"]: =>
@@ -37,5 +40,15 @@ class LuminaryHelper extends lapis.Application
   -- This is what will be rendered manually
   [index: "/"]: =>
     @debug_env = @
+   
+    local f
+
+    for i,v in ipairs @app.router.routes
+      if v[3] == "luminary_index"
+        f = v[2]
+
+    @html ->
+      f(@req)
+
     render: require "luminary.views.luminary_index", layout: require "luminary.views.base"
 
