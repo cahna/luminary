@@ -10,26 +10,26 @@ This project is meant to extend @leafo's work developing [Lapis](https://github.
 
 ## Goals ##
 
- 1. Provide an intuitive, clean, debug module for moonscript applications. Make something you'd _want_ to use on every Lapis project.
- 2. Require minimal configuration: 
-    - require module once (or less, ie: enable via lapis config?)
-    - add within view once (or less?)
-    - allow for further extension with custom panels (maybe later)
-    - Don't be intrusive or behave unexpectedly
- 3. Complete goals list
+1. Provide an intuitive, clean, debug module for moonscript applications. Make something you'd _want_ to use on every Lapis project.
+2. Require minimal configuration: 
+  - require module once (or less, ie: enable via lapis config?)
+  - add within view once (or less?)
+  - allow for further extension with custom panels (maybe later)
+  - Don't be intrusive or behave unexpectedly
+3. Complete goals list
 
 ## Feature Requests / To-do List ##
 
- - [ ] Add lapis console (_in progress_)
- - [ ] Render only from predefined internal IPs
- - [ ] Remove bootstrap/jquery/all unnecessary dependencies
- - [ ] Write tests
+- [ ] Add lapis console (_in progress_)
+- [ ] Render only from predefined internal IPs
+- [ ] Remove bootstrap/jquery/all unnecessary dependencies
+- [ ] Write tests
 
 ## Dependencies ##
 
- * jQuery \*
- * Twitter Bootstrap 3 \*
- * lapis-jshelper
+* jQuery \*
+* Twitter Bootstrap 3 \*
+* lapis-jshelper
 
 \* Not included with this module, must be placed within your projects manually.
 
@@ -46,14 +46,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ### Libraries included with Luminary ###
 
- * jQuery
- * CodeMirror
- * lapis-console
+* jQuery
+* CodeMirror
+* lapis-console
 
 ## Contact ##
 
 ```
 Author: Conor Heine <conor.heine@gmail.com>
 ```
-
 
