@@ -1,74 +1,57 @@
-# Lapis Console
 
-An interactive console for the [Lapis][1] web framework.
+Luminary
+========
 
-```moonscript
--- web.moon
-lapis = require "lapis"
-console = require "lapis.console"
+_Luminary_: A visual debugging toolbar for Lapis websites written in Moonscript (also, the program used in the Lunar Module on Apollo's Guidance Computer).
+ 
+Inspired by CakePHP's debugkit, Django's debug toolbar, and others.
 
-lapis.serve class extends lapis.Application
-  "/console": console.make!
-```
+## Goals ##
 
-```bash
-$ lapis server development
-```
+1. Provide an intuitive, clean, debug module for moonscript applications. Make something you'd _want_ to use on every Lapis project.
+2. Require minimal configuration: 
+   - require module once (or less, ie: enable via lapis config?)
+   - add within view once (or less?)
+   - allow for further extension with custom panels (maybe later)
+   - Don't be intrusive or behave unexpectedly
+3. Complete goals list
 
-Hit <http://localhost:8080/console>
+## Feature Requests / To-do List ##
 
-![Screenshot](http://leafo.net/dump/lapis_console.png)
+[ ] Add lapis console (_in progress_)
+[ ] Render only from predefined internal IPs
+[ ] Remove bootstrap/jquery/all unnecessary dependencies
+[ ] Write tests
 
-## Tips
+## Dependencies ##
 
-Each command executes on the server. The `print` function has been overwritten
-to print to the browser. It has also been enhanced, you can print tables and
-get an interactive version that you can open and close in the browser. Just
-click on the bold `{ ... }` to open the table up.
+ * jQuery \*
+ * Twitter Bootstrap 3 \*
+ * lapis-jshelper
 
-Any SQL queries that take place when running the code you submit will also be
-captured and printed as part of the result. Good for debugging what those
-active record functions are actually doing.
+\* Not included with this module, must be placed within your projects manually.
 
-The input field is a full multi-line text editor. You can write an entire
-program in it.
+## License ##
 
-The code that runs is not restricted in any way. So if you do `while true` it
-will run forever. Also if someone bad gets access to it they can do damage to
-you system so be careful.
+Copyright (C) 2014 Conor Heine
 
-The console is only accessable in the `"development"` environment. It will
-return a 404 if accessed in any other environment.
 
-## Building
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-Uses [Tup][2], the build system.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-```bash
-$ tup init
-$ tup upd
-```
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-# Contact
+### Libraries included with Luminary ###
 
-Author: Leaf Corcoran (leafo) ([@moonscript](http://twitter.com/moonscript))  
-Email: leafot@gmail.com  
-Homepage: <http://leafo.net>  
-License: MIT
+ * jQuery
+ * CodeMirror
+ * lapis-console
 
-# License
-
-Lapis Console includes the following libraries:
+## Contact ##
 
 ```
-jQuery v1.9.1 | (c) 2005, 2012 jQuery Foundation, Inc. | jquery.org/license
+Author: Conor Heine <conor.heine@gmail.com>
 ```
-
-```
-CodeMirror 3.1 Copyright (C) 2013 by Marijn Haverbeke <marijnh@gmail.com>
-```
-
-  [1]: https://github.com/leafo/lapis
-  [2]: http://gittup.org/tup/
 
 
