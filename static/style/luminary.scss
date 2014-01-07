@@ -1,0 +1,39 @@
+
+#luminary-activate {
+  position: absolute;
+  top:      50px;
+  right:    0;
+}
+
+#luminary {
+  background: rgba(0,0,0,0.8);
+  width:      100%;
+  height:     100%;
+  z-index:    1000;
+  top:        0;
+  left:       0;
+  position:   absolute;
+
+  * {
+    border-radius: 0;
+  }
+
+  #luminary-nav {
+    width:  15%;
+
+    a {}
+  }
+
+  #luminary-body {
+    background: rgba(255,255,255,0.8);
+    width:  85%;
+    height: 100%;
+    padding: 10px;
+    overflow-y: auto;
+
+    .tab-content {
+      height: 100%;
+    }
+  }
+}
+
