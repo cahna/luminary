@@ -28,7 +28,7 @@ class LuminaryIndex extends require "luminary.views.base"
           h1 ->
             text "Environment"
           ul ->
-            for fname, func in pairs @debug_env
+            for fname, func in pairs @
               if type fname == "string"
                 li ->
                   text fname
@@ -36,7 +36,7 @@ class LuminaryIndex extends require "luminary.views.base"
           -- Search for the request information
           req = {}
 
-          for k,v in pairs @debug_env
+          for k,v in pairs @
             if type k == "table"
               table.insert req, v
 
@@ -49,13 +49,12 @@ class LuminaryIndex extends require "luminary.views.base"
           h1 ->
             text "Scope"
           ul ->
-            for fname, func in pairs @debug_env.req
+            for fname, func in pairs @
               if type fname == "string"
                 li ->
                   text fname
 
         div id: "request-raw", class: "tab-pane", ->
-          pre(write(@debug_env))
           pre(write(@))
 
         div id: "console-tab", class: "tab-pane", ->
