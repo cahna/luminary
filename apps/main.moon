@@ -18,7 +18,7 @@ class LuminaryConsoleApp extends Application
   -- A path is needed for the console's AJAX to poke
   [console: "/console"]: respond_to {
     before: =>
-      print "console before_filter"
+      print "TODO: console before_filter"
 
     POST: =>
       console.make! @
