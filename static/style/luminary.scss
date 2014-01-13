@@ -1,4 +1,14 @@
 
+pre {
+  color: #3498db;
+  padding: 1em;
+  margin: 0.75em 0;
+  font-size: 1em;
+  line-height: 1.428571429;
+  background-color: #ecf0f1;
+  border: 0;
+}
+
 #luminary-activate {
   position: absolute;
   top:      50px;
@@ -28,11 +38,16 @@
     background: rgba(255,255,255,0.8);
     width:  85%;
     height: 100%;
-    padding: 10px;
+    padding: 1em;
     overflow-y: auto;
 
     .tab-content {
       height: 100%;
+
+      .luminary-data {
+        @extend pre;
+        font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
+      }
     }
   }
 }

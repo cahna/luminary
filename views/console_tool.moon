@@ -11,6 +11,11 @@ class LuminaryConsoleTool extends Widget
       raw require "lapis.console.assets.#{name}"
 
   content: =>
+    -- Include styles 
+    @style "lib_codemirror_css"
+    @style "theme_moon_css"
+    link rel: "stylesheet", href: "/static/luminary/console/style/main.css"
+
     div id: "editor", ->
       div class: "editor_top", ->
         div class: "buttons_top", ->
@@ -27,17 +32,13 @@ class LuminaryConsoleTool extends Widget
       div class: "footer", "lapis_console 0.0.1"
 
     -- Include scripts
-    @script ("lib/jquery_min.js")\gsub "[%/%.]", "_"
+    --@script "lib/jquery_min.js"\gsub "[%/%.]", "_"
     @script "lib/codemirror.js"\gsub "[%/%.]", "_"
     @script "mode_moonscript.js"\gsub "[%/%.]", "_"
     @script "mode_lua_js"\gsub "[%/%.]", "_"
-    script type: "text/javascript", src: "/static/luminary/console/js/main.js"
 
-    -- Include styles 
-    @style "lib_codemirror_css"
-    @style "theme_moon_css"
-    link rel: "stylesheet", href: "/static/luminary/console/style/main.css"
+    script src: "/static/luminary/console/js/main.js"
 
     script type: "text/javascript", ->
-      raw [[_editor = new Lapis.Editor("#editor");]]
+      raw "$(document).ready(function(){ _editor = new Lapis.Editor('#editor'); });"
 

@@ -10,7 +10,7 @@ class Lapis.Editor
     }
 
     @set_status "loading", "Loading..."
-    $.post "?#{opts}", {code: code}, (res) =>
+    $.post "/luminary/console?#{opts}", {code: code}, (res) =>
       if res.error
         @set_status "error", res.error
         if m = res.error.match /\[(\d+)\]/

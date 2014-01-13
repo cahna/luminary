@@ -11,11 +11,10 @@
 -- TODO: Enable respond_to "GET" if enabled in lapis config file
 -- 
 
-lapis = require "lapis"
-console = require "luminary.console"
+import Application, respond_to, capture_errors_json from require "lapis.application"
+import assert_valid from require "lapis.validate"
 
-import Application, respond_to from require "lapis.application"
-import Widget from require "lapis.html"
+console = require "luminary.console"
 
 class LuminaryConsoleApp extends Application
   @path: "/luminary"
@@ -23,13 +22,33 @@ class LuminaryConsoleApp extends Application
 
   -- A path is needed for the console's AJAX to poke
   [console: "/console"]: respond_to {
-    before: =>
-      print "TODO: console before_filter"
-
     POST: =>
-      console.make! @
+      parse = require "moonscript.parse"
+      compile = require "moonscript.compile"
 
+      -- moon_code = [[(-> print "hello world")!]]
+      moon_code = @params.code
+
+      tree, err = parse.string moon_code
+      if not tree
+        error "Parse error: " .. err
+
+      lua_code, err, pos = compile.tree tree
+      if not lua_code
+        error compile.format_error err, pos, moon_code
+
+      -- our code is ready
+      print lua_code
     GET: =>
-      @write redirect_to: @req.headers.referer or @url_for("index") or "/"
+      console.make! @
   }
+
+--  [console: "/console"]: respond_to {
+    -- before: =>
+      -- ...
+
+    -- GET: console.make! -- =>
+      -- make! @
+      -- @write redirect_to: @req.headers.referer or @url_for("index") or "/"
+--  }
 
