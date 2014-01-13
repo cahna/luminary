@@ -59,5 +59,3 @@ class Console extends Widget
     style type: "text/css", ->
       raw require "lapis.console.assets.#{name}"
 
-
-

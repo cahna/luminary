@@ -1,12 +1,18 @@
 
 ---
 -- Luminary Console: Proxy for the modified version of lapis-console included
--- with the Luminary package (luminary.console)
+-- with the Luminary package (luminary.console).
+--
+-- This module should be required in your main lapis application (usually 
+-- web.moon) to provide a POST-only interface for the modified lapis-console
+-- to direct it's AJAX requests.
+--
+-- TODO: Enable/disable this Application via lapis config file
+-- TODO: Enable respond_to "GET" if enabled in lapis config file
 -- 
 
 lapis = require "lapis"
 console = require "luminary.console"
-js = require "lapis.helper.javascript"
 
 import Application, respond_to from require "lapis.application"
 import Widget from require "lapis.html"

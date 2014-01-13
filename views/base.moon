@@ -2,13 +2,12 @@
 import Widget from require "lapis.html"
 
 class LuminaryLayout extends Widget
-  @include "luminary.views.util"
 
   inner_content: =>
     raw "Overload me"
 
   content: =>
-    @include_style "luminary"
+    link rel: "stylesheet", type: "text/css", href: "/static/luminary/style/luminary.css"
 
     -- Toggle button
     div id: "luminary-activate", ->
@@ -19,5 +18,6 @@ class LuminaryLayout extends Widget
     div id: "luminary", class: "hide", ->
       @inner_content!
 
-    @JsHelper\add_on_ready require "luminary.assets.luminary_js"
+    script type: "text/javascript", ->
+      raw require "luminary.assets.luminary_js"
 

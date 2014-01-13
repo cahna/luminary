@@ -58,10 +58,13 @@ class LuminaryIndex extends require "luminary.views.base"
           pre(write(@))
 
         div id: "console-tab", class: "tab-pane", ->
-          --@console_content!
           pre "CONSOLE CONTENT HERE"
+          @console_content!
 
---  console_content: =>
+  console_content: =>
+    with require "luminary.views.console_tool"
+      \render_to_string!
+
 --    @console_script "lib_codemirror_js"
 --    @console_script "mode_moonscript_js"
 --    @console_script "mode_lua_js"
