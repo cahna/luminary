@@ -10,11 +10,11 @@ class LuminaryIndex extends require "luminary.views.base"
           a href: "#", ->
             text "Close Luminary >>"
         li class: "active", ->
-          a href: "#env-info", ["data-toggle"]: "tab", ->
-            text "Environment"
+          a href: "#request-info", ["data-toggle"]: "tab", ->
+            text "Request"
         li ->
-          a href: "#buffer-info", ["data-toggle"]: "tab", ->
-            text "Buffer"
+          a href: "#router-info", ["data-toggle"]: "tab", ->
+            text "Router"
         li ->
           a href: "#request-raw", ["data-toggle"]: "tab", ->
             text "Raw"
@@ -24,35 +24,50 @@ class LuminaryIndex extends require "luminary.views.base"
 
     div id: "luminary-body", class: "col-md-10", ->
       div class: "tab-content", ->
-        div id: "env-info", class: "tab-pane active", ->
-          h1 ->
-            text "Environment"
-          ul ->
-            for fname, func in pairs @
-              if type fname == "string"
-                li ->
-                  text fname
-
-          -- Search for the request information
-          req = {}
-
-          for k,v in pairs @
-            if type k == "table"
-              table.insert req, v
-
-          if req[1]
+        div id: "request-info", class: "tab-pane active", ->
+          for _title, _data in pairs @req
             h1 ->
-              text "Request"
-            pre write req[1]
+              text _title .. ":"
+            pre write _data
 
-        div id: "buffer-info", class: "tab-pane", ->
+        div id: "router-info", class: "tab-pane", ->
           h1 ->
-            text "Scope"
-          ul ->
-            for fname, func in pairs @
-              if type fname == "string"
-                li ->
-                  text fname
+            text "Routes"
+
+          tab_classes = {
+            "table"
+            --"table-condensed"
+            "table-striped"
+          }
+
+          element "table", class: table.concat(tab_classes, " "), ->
+            tr ->
+              th ->
+                text "#"
+              th ->
+                text "Path"
+              th ->
+                text "Name"
+              th ->
+                text "Action"
+
+            for n,r in pairs @app.router.routes
+              r_path, r_name, r_action = r[1], r[3], r[2]
+
+              row_classes = if r_name\match "luminary"
+                  "warning"
+                else
+                  ""
+
+              tr class: row_classes, ->
+                td ->
+                  text n
+                td ->
+                  text r[1]
+                td ->
+                  text r[3]
+                td ->
+                  text tostring r[2]
 
         div id: "request-raw", class: "tab-pane", ->
           pre(write(@))
@@ -62,8 +77,7 @@ class LuminaryIndex extends require "luminary.views.base"
           @console_content!
 
   console_content: =>
-    with require "luminary.views.console_tool"
-      \render_to_string!
+    raw require("luminary.views.console_tool")\render_to_string!
 
 --    @console_script "lib_codemirror_js"
 --    @console_script "mode_moonscript_js"
