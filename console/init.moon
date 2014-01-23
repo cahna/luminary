@@ -64,7 +64,9 @@ run = (self, fn using nil) ->
 
   setfenv fn, scope
   ret = { pcall fn }
-  return unpack ret, 1, 2 unless ret[1]
+  
+  unless ret[1]
+    return unpack ret, 1, 2
 
   db.set_logger old_logger
   lines, queries

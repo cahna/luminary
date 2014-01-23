@@ -40,5 +40,6 @@ class LuminaryConsoleTool extends Widget
     script src: "/static/luminary/console/js/main.js"
 
     script type: "text/javascript", ->
-      raw "$(document).ready(function(){ _editor = new Lapis.Editor('#editor'); });"
+      --raw "$(document).ready(function(){ _editor = new Lapis.Editor('#editor'); });"
+      raw "_editor = new Lapis.Editor('#editor');"
 

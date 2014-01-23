@@ -14,7 +14,17 @@
 import Application, respond_to, capture_errors_json from require "lapis.application"
 import assert_valid from require "lapis.validate"
 
-console = require "luminary.console"
+-- import run from require "lapis.console"
+
+--_G.moon_no_loader = true
+export moon_no_loader = true
+
+parse = require "moonscript.parse"
+compile = require "moonscript.compile"
+
+import run from require "lapis.console"
+
+--import write from require "pl.pretty"
 
 class LuminaryConsoleApp extends Application
   @path: "/luminary"
@@ -22,33 +32,85 @@ class LuminaryConsoleApp extends Application
 
   -- A path is needed for the console's AJAX to poke
   [console: "/console"]: respond_to {
-    POST: =>
-      parse = require "moonscript.parse"
-      compile = require "moonscript.compile"
+    POST: capture_errors_json =>
+      @params.lang or= "moonscript"
+      @params.code or= ""
 
-      -- moon_code = [[(-> print "hello world")!]]
-      moon_code = @params.code
+      assert_valid @params, {
+        { "lang", one_of: {"lua", "moonscript"} }
+      }
 
-      tree, err = parse.string moon_code
-      if not tree
-        error "Parse error: " .. err
+      if @params.lang == "moonscript"
+        -- moon_code = [[(-> print "hello world")!]]
+        moon_code = @params.code
 
-      lua_code, err, pos = compile.tree tree
-      if not lua_code
-        error compile.format_error err, pos, moon_code
+        tree, p_err = parse.string moon_code
+        if not tree
+          { json: { error: "Parse error: " .. p_err } }
 
-      -- our code is ready
-      print lua_code
-    GET: =>
-      console.make! @
+        lua_code, c_err, pos = compile.tree tree
+
+        if not lua_code
+          { json: { error: compile.format_error(c_err, pos, moon_code) } }
+
+        else
+          lines, queries = run @, loadstring lua_code
+          if lines
+            { json: { :lines, :queries } }
+          else
+            { json: { error: queries } }
+
+--    GET: =>
+--      console.make! @
+--      --{ json: { error: "why you GET?" } }
   }
 
 --  [console: "/console"]: respond_to {
-    -- before: =>
-      -- ...
-
-    -- GET: console.make! -- =>
-      -- make! @
-      -- @write redirect_to: @req.headers.referer or @url_for("index") or "/"
+--    POST: =>
+--      parse = require "moonscript.parse"
+--      compile = require "moonscript.compile"
+--
+--      -- moon_code = [[(-> print "hello world")!]]
+--      moon_code = @params.code
+--
+--      tree, err = parse.string moon_code
+--      if not tree
+--        error "Parse error: " .. err
+--
+--      lua_code, err, pos = compile.tree tree
+--      if not lua_code
+--        error compile.format_error err, pos, moon_code
+--
+--      -- our code is ready
+--      print lua_code
+--
+--    GET: =>
+--      console.make! @
 --  }
+
+
+  [console: "/console"]: respond_to {
+    POST: capture_errors_json =>
+      @params.lang or= "moonscript"
+      @params.code or= ""
+
+      assert_valid @params, {
+        { "lang", one_of: {"lua", "moonscript"} }
+      }
+
+      if @params.lang == "moonscript"
+        moonscript = require "moonscript.base"
+        fn, err = moonscript.loadstring @params.code
+        if err
+          { json: { error: err } }
+        else
+          lines, queries = run @, fn
+          if lines
+            { json: { :lines, :queries } }
+          else
+            { json: { error: queries } }
+
+    GET: =>
+      console.make! @
+  }
 
