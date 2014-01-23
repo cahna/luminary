@@ -11,27 +11,91 @@
 -- TODO: Enable respond_to "GET" if enabled in lapis config file
 -- 
 
-import Application, respond_to, capture_errors_json from require "lapis.application"
+json = require "cjson"
+json.encode_max_depth 1000
+
+lapis = require "lapis.init"
+config = require"lapis.config".get!
+
+import Application, respond_to, capture_errors_json, assert_error, yield_error
+  from require "lapis.application"
 import assert_valid from require "lapis.validate"
+import insert from table
 
--- import run from require "lapis.console"
+import run from require "luminary.console"
 
---_G.moon_no_loader = true
-export moon_no_loader = true
+moonscript = require "moonscript.base"
 
-parse = require "moonscript.parse"
-compile = require "moonscript.compile"
+raw_tostring = (o) ->
+  if meta = type(o) == "table" and getmetatable o
+    setmetatable o, nil
+    with tostring o
+      setmetatable o, meta
+  else
+    tostring o
 
-import run from require "lapis.console"
+encode_value = (val, seen={}, depth=0) ->
+  depth += 1
+  t = type val
+  switch t
+    when "table"
+      if seen[val]
+        return { "recursion", raw_tostring(val) }
 
---import write from require "pl.pretty"
+      seen[val] = true
+
+      tuples = for k,v in pairs val
+        { encode_value(k, seen, depth), encode_value(v, seen, depth) }
+
+      if meta = getmetatable val
+        insert tuples, {
+          { "metatable", "metatable" }
+          encode_value meta, seen, depth
+        }
+
+      { t, tuples }
+    else
+      { t, raw_tostring val }
+
+-- Encapsulate fn to capture its db queries and print() output
+run = (self, fn using nil) ->
+  lines = {}
+  queries = {}
+
+  scope = setmetatable {
+    :self
+    print: (...) ->
+      count = select "#", ...
+      insert lines, [ encode_value (select i, ...) for i=1,count]
+  }, __index: _G
+
+  db = require "lapis.db"
+  old_logger = db.get_logger!
+  db.set_logger {
+    query: (q) ->
+      insert queries, q
+      old_logger.query q if old_logger
+  }
+
+  setfenv fn, scope
+  ret = { pcall fn }
+  
+  unless ret[1]
+    return unpack ret, 1, 2
+
+  db.set_logger old_logger
+  lines, queries
 
 class LuminaryConsoleApp extends Application
   @path: "/luminary"
   @name: "luminary_"
 
   -- A path is needed for the console's AJAX to poke
+
   [console: "/console"]: respond_to {
+    GET: =>
+      render: view, layout: false
+
     POST: capture_errors_json =>
       @params.lang or= "moonscript"
       @params.code or= ""
@@ -41,28 +105,16 @@ class LuminaryConsoleApp extends Application
       }
 
       if @params.lang == "moonscript"
-        -- moon_code = [[(-> print "hello world")!]]
-        moon_code = @params.code
-
-        tree, p_err = parse.string moon_code
-        if not tree
-          { json: { error: "Parse error: " .. p_err } }
-
-        lua_code, c_err, pos = compile.tree tree
-
-        if not lua_code
-          { json: { error: compile.format_error(c_err, pos, moon_code) } }
-
+        -- moonscript = require "moonscript.base"
+        fn, err = moonscript.loadstring @params.code
+        if err
+          { json: { error: err } }
         else
-          lines, queries = run @, loadstring lua_code
+          lines, queries = run @, fn
           if lines
             { json: { :lines, :queries } }
           else
             { json: { error: queries } }
-
---    GET: =>
---      console.make! @
---      --{ json: { error: "why you GET?" } }
   }
 
 --  [console: "/console"]: respond_to {
@@ -87,30 +139,4 @@ class LuminaryConsoleApp extends Application
 --    GET: =>
 --      console.make! @
 --  }
-
-
-  [console: "/console"]: respond_to {
-    POST: capture_errors_json =>
-      @params.lang or= "moonscript"
-      @params.code or= ""
-
-      assert_valid @params, {
-        { "lang", one_of: {"lua", "moonscript"} }
-      }
-
-      if @params.lang == "moonscript"
-        moonscript = require "moonscript.base"
-        fn, err = moonscript.loadstring @params.code
-        if err
-          { json: { error: err } }
-        else
-          lines, queries = run @, fn
-          if lines
-            { json: { :lines, :queries } }
-          else
-            { json: { error: queries } }
-
-    GET: =>
-      console.make! @
-  }
 

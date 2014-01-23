@@ -49,6 +49,7 @@ run = (self, fn using nil) ->
 
   scope = setmetatable {
     :self
+    :_G
     print: (...) ->
       count = select "#", ...
       insert lines, [ encode_value (select i, ...) for i=1,count]
