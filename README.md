@@ -20,8 +20,10 @@ This project is meant to extend @leafo's work developing [Lapis](https://github.
 
 ## Feature Requests / To-do List ##
 
-- [ ] Add lapis console (_in progress_)
-- [ ] Render only from predefined internal IPs
+- [x] Add lapis console
+- [ ] Capture database queries
+- [ ] Handle rendering conditions from config
+- [ ] Capture & compile request stats
 - [ ] Remove bootstrap/jquery/all unnecessary dependencies
 - [ ] Write tests
 
