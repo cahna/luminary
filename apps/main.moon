@@ -22,7 +22,9 @@ import Application, respond_to, capture_errors_json, assert_error, yield_error
 import assert_valid from require "lapis.validate"
 import insert from table
 
-import run from require "luminary.console"
+--import run from require "luminary.console"
+
+console = require "luminary.console"
 
 moonscript = require "moonscript.base"
 
@@ -57,16 +59,18 @@ encode_value = (val, seen={}, depth=0) ->
     else
       { t, raw_tostring val }
 
--- Encapsulate fn to capture its db queries and print() output
-run = (self, fn using nil) ->
+
+run = (_self, fn using encode_value) ->
   lines = {}
   queries = {}
 
+  _p = (... using insert, lines, queries) ->
+    count = select "#", ...
+    insert lines, [ encode_value (select i, ...) for i=1,count ]
+
   scope = setmetatable {
-    :self
-    print: (...) ->
-      count = select "#", ...
-      insert lines, [ encode_value (select i, ...) for i=1,count]
+    self: _self
+    print: _p
   }, __index: _G
 
   db = require "lapis.db"
@@ -93,8 +97,7 @@ class LuminaryConsoleApp extends Application
   -- A path is needed for the console's AJAX to poke
 
   [console: "/console"]: respond_to {
-    GET: =>
-      render: view, layout: false
+    GET: console.make!
 
     POST: capture_errors_json =>
       @params.lang or= "moonscript"
@@ -106,7 +109,14 @@ class LuminaryConsoleApp extends Application
 
       if @params.lang == "moonscript"
         -- moonscript = require "moonscript.base"
-        fn, err = moonscript.loadstring @params.code
+        -- fn, err = moonscript.loadstring @params.code
+        lua_code, ltable = moonscript.to_lua @params.code
+
+        print "REQ (SELF): #{@}"
+        print "LUA_CODE: #{lua_code}"
+
+        fn, err = loadstring lua_code
+
         if err
           { json: { error: err } }
         else

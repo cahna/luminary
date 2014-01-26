@@ -1,6 +1,5 @@
 
 import Widget from require "lapis.html"
-import write from require "pl.pretty"
 
 import insert, concat from table
 
@@ -12,7 +11,7 @@ class LuminaryIndex extends require "luminary.views.base"
       if _t == "string"
         text "#{h}:"
       else
-        text "#{write h} (#{_t})"
+        text "#{h} (#{_t})"
 
   describe_contents: (d) =>
     _t = type d
@@ -28,7 +27,7 @@ class LuminaryIndex extends require "luminary.views.base"
       div class: "luminary-data", ->
         text d
     else
-      pre write dict
+      pre "#{dict}"
 
   inner_content: =>
     div id: "luminary-nav", class: "pull-right", ->
@@ -100,7 +99,7 @@ class LuminaryIndex extends require "luminary.views.base"
                   text tostring r[2]
 
         div id: "request-raw", class: "tab-pane", ->
-          pre(write(@))
+          pre "#{@}"
 
         div id: "console-tab", class: "tab-pane", ->
           @console_content!

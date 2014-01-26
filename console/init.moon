@@ -1,3 +1,4 @@
+
 json = require "cjson"
 json.encode_max_depth 1000
 
@@ -43,35 +44,6 @@ encode_value = (val, seen={}, depth=0) ->
     else
       { t, raw_tostring val }
 
-run = (self, fn using nil) ->
-  lines = {}
-  queries = {}
-
-  scope = setmetatable {
-    :self
-    :_G
-    print: (...) ->
-      count = select "#", ...
-      insert lines, [ encode_value (select i, ...) for i=1,count]
-  }, __index: _G
-
-  db = require "lapis.db"
-  old_logger = db.get_logger!
-  db.set_logger {
-    query: (q) ->
-      insert queries, q
-      old_logger.query q if old_logger
-  }
-
-  setfenv fn, scope
-  ret = { pcall fn }
-  
-  unless ret[1]
-    return unpack ret, 1, 2
-
-  db.set_logger old_logger
-  lines, queries
-
 make = (opts={}) ->
   opts.env or= "development"
 
@@ -85,6 +57,36 @@ make = (opts={}) ->
       render: view, layout: false
 
     POST: capture_errors_json =>
+      run = (_self, fn using encode_value) ->
+        lines = {}
+        queries = {}
+
+        _p = (... using insert, lines, queries) ->
+          count = select "#", ...
+          insert lines, [ encode_value (select i, ...) for i=1,count ]
+
+        scope = setmetatable {
+          self: _self
+          print: _p
+        }, __index: _G
+
+        db = require "lapis.db"
+        old_logger = db.get_logger!
+        db.set_logger {
+          query: (q) ->
+            insert queries, q
+            old_logger.query q if old_logger
+        }
+
+        setfenv fn, scope
+        ret = { pcall fn }
+        
+        unless ret[1]
+          return unpack ret, 1, 2
+
+        db.set_logger old_logger
+        lines, queries
+
       @params.lang or= "moonscript"
       @params.code or= ""
 
