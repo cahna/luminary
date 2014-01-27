@@ -1,14 +1,4 @@
 
-pre {
-  color: #3498db;
-  padding: 1em;
-  margin: 0.75em 0;
-  font-size: 1em;
-  line-height: 1.428571429;
-  background-color: #ecf0f1;
-  border: 0;
-}
-
 #luminary-activate {
   position: absolute;
   top:      50px;
@@ -26,6 +16,16 @@ pre {
 
   * {
     border-radius: 0;
+  }
+
+  pre.raw-data {
+    color: #3498db;
+    padding: 1em;
+    margin: 0.75em 0;
+    font-size: 1em;
+    line-height: 1.428571429;
+    background-color: #ecf0f1;
+    border: 0;
   }
 
   #luminary-nav {
@@ -47,6 +47,12 @@ pre {
       .luminary-data {
         @extend pre;
         font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
+      }
+    }
+
+    #editor {
+      pre {
+        background-color: transparent;
       }
     }
   }

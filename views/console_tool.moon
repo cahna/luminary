@@ -2,19 +2,19 @@
 import Widget from require "lapis.html"
 
 class LuminaryConsoleTool extends Widget
-  script: (name) =>
+  script: (name, base = "lapis.console.assets") =>
     script type: "text/javascript", ->
-      raw require "lapis.console.assets.#{name}"
+      raw require "#{base}.#{name}"
 
-  style: (name) =>
+  style: (name, base = "lapis.console.assets") =>
     style type: "text/css", ->
-      raw require "lapis.console.assets.#{name}"
+      raw require "#{base}.#{name}"
 
   content: =>
     -- Include styles 
     @style "lib_codemirror_css"
     @style "theme_moon_css"
-    link rel: "stylesheet", href: "/static/luminary/console/style/main.css"
+    @style "main_css", "luminary.console.assets"
 
     div id: "editor", ->
       div class: "editor_top", ->
@@ -32,14 +32,12 @@ class LuminaryConsoleTool extends Widget
       div class: "footer", "lapis_console 0.0.1"
 
     -- Include scripts
-    --@script "lib/jquery_min.js"\gsub "[%/%.]", "_"
-    @script "lib/codemirror.js"\gsub "[%/%.]", "_"
-    @script "mode_moonscript.js"\gsub "[%/%.]", "_"
-    @script "mode_lua_js"\gsub "[%/%.]", "_"
-
-    script src: "/static/luminary/console/js/main.js"
+    --@script "lib_jquery_min_js"
+    @script "lib_codemirror_js"
+    @script "mode_moonscript_js"
+    @script "mode_lua_js"
+    @script "main_js", "luminary.console.assets"
 
     script type: "text/javascript", ->
-      --raw "$(document).ready(function(){ _editor = new Lapis.Editor('#editor'); });"
       raw "_editor = new Lapis.Editor('#editor');"
 
