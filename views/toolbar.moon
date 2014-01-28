@@ -1,6 +1,5 @@
 
 import Widget from require "lapis.html"
-
 import insert, concat from table
 
 class LuminaryIndex extends require "luminary.views.base"
@@ -17,17 +16,22 @@ class LuminaryIndex extends require "luminary.views.base"
     _t = type d
 
     if _t == "table"
-      dl class: "luminary-data dl-horizontal", ->
-        for k,v in pairs d
-          dt ->
-            text k
-          dd ->
-            text v
+      element "table", class: "table table-bordered table-striped", style: "width:100%;", ->
+        for _element, _value in pairs d
+          tr ->
+            td style: "width: 20%; font-weight: bold;", ->
+              raw tostring _element
+            td style: "width: 80%;", ->
+              raw tostring _value
     elseif _t == "string"
       div class: "luminary-data", ->
         text d
     else
-      pre "#{dict}"
+      pre "#{d}"
+
+  render_section: (t, d) =>
+    @safe_h1 t
+    @describe_contents d
 
   inner_content: =>
     div id: "luminary-nav", class: "pull-right", ->
@@ -36,26 +40,40 @@ class LuminaryIndex extends require "luminary.views.base"
           a href: "#", ->
             text "Close Luminary >>"
         li class: "active", ->
-          a href: "#request-info", ["data-toggle"]: "tab", ->
+          a href: "#l-requestinfo", ["data-toggle"]: "tab", ->
             text "Request"
         li ->
-          a href: "#router-info", ["data-toggle"]: "tab", ->
+          a href: "#l-routerinfo", ["data-toggle"]: "tab", ->
             text "Router"
         li ->
-          a href: "#request-raw", ["data-toggle"]: "tab", ->
+          a href: "#l-rawrequest", ["data-toggle"]: "tab", ->
             text "Raw"
         li ->
-          a href: "#console-tab", ["data-toggle"]: "tab", id: "nav-console-tab", ->
+          a href: "#l-ngxinfo", ["data-toggle"]: "tab", ->
+            text "ngx_openresty"
+        li ->
+          a href: "#l-lapisconsole", ["data-toggle"]: "tab", id: "nav-console-tab", ->
             text "Console"
 
     div id: "luminary-body", class: "col-md-10", ->
       div class: "tab-content", ->
-        div id: "request-info", class: "tab-pane active", ->
+        div id: "l-requestinfo", class: "tab-pane active", ->
           for k,v in pairs @req
             @safe_h1 k
             @describe_contents v
 
-        div id: "router-info", class: "tab-pane", ->
+          ngx = require "ngx"
+          ngx_info = {
+            ["Request Stats"]: {
+              ["Request Time"]: "#{(ngx.now! * 1000) - (ngx.req.start_time! * 1000)} ms"
+              ["HTTP Version"]: ngx.req.http_version!
+              ["Status"]: ngx.status
+            }
+          }
+
+          @render_section(t,d) for t,d in pairs ngx_info
+
+        div id: "l-routerinfo", class: "tab-pane", ->
           h1 ->
             text "Routes"
 
@@ -98,10 +116,86 @@ class LuminaryIndex extends require "luminary.views.base"
                 td ->
                   text tostring r[2]
 
-        div id: "request-raw", class: "tab-pane", ->
+        div id: "l-rawrequest", class: "tab-pane", ->
           pre "#{@}"
 
-        div id: "console-tab", class: "tab-pane", ->
+        div id: "l-ngxinfo", class: "tab-pane", ->
+          ngx = require "ngx"
+          ngx_info = {
+            ["Server Configuration"]: {
+              ["Nginx version"]: ngx.config.nginx_version
+              ["Nginx Lua version"]: ngx.config.ngx_lua_version
+              ["Debug build"]: ngx.config.debug
+              ["Prefix path"]: ngx.config.prefix!
+              ["package.path"]: package.path\gsub ";", ";<br />"
+              ["package.cpath"]: package.cpath\gsub ";", ";<br />"
+            }
+          }
+
+          for section_title, section_data in pairs ngx_info
+            h1 ->
+              text section_title
+
+            element "table", class: "table table-bordered table-striped", style: "width:100%;", ->
+              for _element, _value in pairs section_data
+                tr ->
+                  td style: "width: 20%; font-weight: bold;", ->
+                    raw tostring _element
+                  td style: "width: 80%;", ->
+                    raw tostring _value
+
+          ngx_vars = {
+            "args"
+            "body_bytes_sent"
+            "content_length"
+            "content_type"
+            "cookie_test"
+            "document_root"
+            "document_uri"
+            "headers_in"
+            "headers_out"
+            "host"
+            "hostname"
+            "http_user_agent"
+            "http_referer"
+            "is_args"
+            "limit_rate"
+            "nginx_version"
+            "query_string"
+            "remote_addr"
+            "remote_port"
+            "remote_user"
+            "request_filename"
+            "request_body"
+            "request_body_file"
+            "request_completion"
+            "request_method"
+            "request_uri"
+            "scheme"
+            "server_addr"
+            "server_name"
+            "server_port"
+            "server_protocol"
+            "uri"
+          }
+
+          @safe_h1 "ngx.var"
+
+          element "table", class: "table table-bordered table-striped", style: "width: 100%", ->
+            for _v in *ngx_vars
+              tr ->
+                td style: "width: 20%; font-weight: bold;", ->
+                  text "ngx.var.#{_v}"
+                td style: "width: 80%;", ->
+                  raw tostring(ngx.var[_v] or "")
+
+          h1 ->
+            text "ngx"
+          pre ->
+            for k,v in pairs ngx
+              raw "#{k} : #{v}"
+
+        div id: "l-lapisconsole", class: "tab-pane", ->
           @console_content!
 
   console_content: =>
