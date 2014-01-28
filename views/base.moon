@@ -7,14 +7,15 @@ class LuminaryLayout extends Widget
     raw "Overload me"
 
   content: =>
-    link rel: "stylesheet", type: "text/css", href: "/static/luminary/style/luminary.css"
+    style type: "text/css", ->
+      raw require "luminary.assets.luminary_css"
 
     -- Toggle button
     div id: "luminary-activate", ->
       div id: "luminary-button", class: "btn btn-warning", ->
         text "</>"
 
-    -- Main overlay div
+    -- Full-window overlay div
     div id: "luminary", class: "hide", ->
       @inner_content!
 
