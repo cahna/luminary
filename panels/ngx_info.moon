@@ -1,4 +1,5 @@
 
+import label_wrap, float_wrap from require "luminary.panels.util"
 import concat from table
 
 -- Available ngx variables
@@ -37,11 +38,6 @@ ngx_vars = {
   "body_bytes_sent"
 }
 
-label_wrap = (s) ->
-  "<span class=\"label label-default\" style=\"float:left;\">#{s}</span>"
-
-float_wrap = (s) ->
-  "<span style=\"float:left;\">#{s}</span>"
 
 class NgxInfoPanel extends require "luminary.panels.base"
   title: "Nginx"
