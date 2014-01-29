@@ -1,6 +1,6 @@
 
 import label_wrap, float_wrap from require "luminary.panels.util"
-import concat from table
+import sort, concat from table
 
 -- Available ngx variables
 ngx_vars = {
@@ -38,6 +38,78 @@ ngx_vars = {
   "body_bytes_sent"
 }
 
+ngx_constants = {
+  status: {
+    "HTTP_OK"
+    "HTTP_CREATED"
+    "HTTP_SPECIAL_RESPONSE"
+    "HTTP_MOVED_PERMANENTLY"
+    "HTTP_MOVED_TEMPORARILY"
+    "HTTP_SEE_OTHER"
+    "HTTP_NOT_MODIFIED"
+    "HTTP_BAD_REQUEST"
+    "HTTP_UNAUTHORIZED"
+    "HTTP_FORBIDDEN"
+    "HTTP_NOT_FOUND"
+    "HTTP_NOT_ALLOWED"
+    "HTTP_GONE"
+    "HTTP_INTERNAL_SERVER_ERROR"
+    "HTTP_METHOD_NOT_IMPLEMENTED"
+    "HTTP_SERVICE_UNAVAILABLE"
+    "HTTP_GATEWAY_TIMEOUT"
+  }
+  method: {
+    "HTTP_GET"
+    "HTTP_HEAD"
+    "HTTP_PUT"
+    "HTTP_POST"
+    "HTTP_DELETE"
+    "HTTP_OPTIONS"
+    "HTTP_MKCOL"
+    "HTTP_COPY"
+    "HTTP_MOVE"
+    "HTTP_PROPFIND"
+    "HTTP_PROPPATCH"
+    "HTTP_LOCK"
+    "HTTP_UNLOCK"
+    "HTTP_PATCH"
+    "HTTP_TRACE"
+  }
+  log: {
+    "STDERR"
+    "EMERG"
+    "ALERT"
+    "CRIT"
+    "ERR"
+    "WARN"
+    "NOTICE"
+    "INFO"
+    "DEBUG"
+  }
+  core: {"OK", "ERROR", "AGAIN", "DONE", "DECLINED", "null"}
+}
+
+-- Nginx constants are returned as strings. This compare function handles sane sorting
+-- of a table of tuples such that each tuple is of the form {dontcare, string} where 
+-- the string value is a string-representation of a number. Anything that can't sanely
+-- be converted to a number through lua's tonumber(...) is given a value of 0 so its
+-- element is pushed to the bottom of the tuple list upon sorting.
+cmp_tuple_vals = (a,b) ->
+  v1,v2 = a[2], b[2]
+
+  success,val = pcall(tonumber, v1)
+  if not success or val == nil
+    v1 = 0
+  else
+    v1 = val
+  
+  success,val = pcall(tonumber, v2)
+  if not success or val == nil
+    v2 = 0
+  else
+    v2 = val
+
+  v1 < v2
 
 class NgxInfoPanel extends require "luminary.panels.base"
   title: "Nginx"
@@ -88,4 +160,16 @@ class NgxInfoPanel extends require "luminary.panels.base"
       { "package.cpath",     pcpath }
       { "package.loaded",    concat loaded_modules }
     }
+
+    h1 ->
+      text "Nginx constants"
+
+    for name, values in pairs ngx_constants
+      h3 ->
+        text name
+
+      ngx_cvals = [ {"ngx.#{key}", tostring ngx[key]} for key in *values ]
+      
+      sort ngx_cvals, cmp_tuple_vals
+      @tuple_table ngx_cvals
 
