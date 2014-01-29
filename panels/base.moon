@@ -2,6 +2,11 @@
 import Widget from require "lapis.html"
 
 class PanelBase extends Widget
+  title: "Base Panel"
+
+  content: =>
+    h1 "Extend this class to create your own Luminary Panels!"
+
   safe_h1: (h) =>
     h1 ->
       _t = type(h)
@@ -21,7 +26,11 @@ class PanelBase extends Widget
             td style: "width: 20%; font-weight: bold;", ->
               raw tostring _element
             td style: "width: 80%;", ->
-              raw tostring _value
+              if type(_value) == "table"
+                -- TODO: At some point I should probably ensure this doesn't recurse endlessly
+                @table_contents(_value)
+              else
+                raw tostring _value
     elseif _t == "string"
       div class: "luminary-data", ->
         text d
@@ -42,9 +51,4 @@ class PanelBase extends Widget
   render_section: (t, d) =>
     @safe_h1 t
     @table_contents d
-
-  title: "Base Panel"
-
-  content: =>
-    h1 "Extend this class to create your own Luminary Panels!"
 

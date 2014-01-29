@@ -3,8 +3,11 @@ class RequestPanel extends require "luminary.panels.base"
   title: "Request"
 
   content: =>
-    for k,v in pairs @req
-      @render_section k,v
+    @render_section "Request", @req
+
+    --for k,v in pairs @req
+      --@render_section k,v
+
       --@safe_h1 k
       --@table_contents v
 

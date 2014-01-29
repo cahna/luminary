@@ -53,12 +53,3 @@ class RouterPanel extends require "luminary.panels.base"
           td ->
             text tostring r_action
 
---    h1 ->
---      text "GET Params"
---
---    @table_contents @req.params_get
---
---    for k,v in pairs @req
---      @safe_h1 k
---      @table_contents v
-
