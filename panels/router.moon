@@ -1,12 +1,8 @@
 
 import insert,concat,sort from table
 
--- Used to sort lapis routes table by route name
-route_sorter = (t1,t2) ->
-  return t1[3] < t2[3]
-
 class RouterPanel extends require "luminary.panels.base"
-  title: "Router"
+  @title = "Router"
 
   content: =>
     h1 ->
@@ -31,7 +27,7 @@ class RouterPanel extends require "luminary.panels.base"
 
       {:default_route, :routes} = @app.router
 
-      sort routes, route_sorter
+      sort routes, (t1,t2) -> t1[3] < t2[3]
 
       n = 0
       for {r_path, r_action, r_name} in *routes
@@ -39,8 +35,10 @@ class RouterPanel extends require "luminary.panels.base"
         row_classes = {}
 
         if r_action == default_route
+          -- This doesn't work as expected. TODO: highlight default route green
           insert row_classes, "success"
         else if r_name\match "luminary"
+          -- Make luminary routes yellow
           insert row_classes, "warning"
 
         tr class: concat(row_classes), ->

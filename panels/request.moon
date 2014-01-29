@@ -1,6 +1,6 @@
 
 class RequestPanel extends require "luminary.panels.base"
-  title: "Request"
+  @title = "Request"
 
   content: =>
     @render_section "Request", @req

@@ -1,10 +1,13 @@
 
+import slugify from require "lapis.util"
 import insert, concat from table
 
+-- Out-of-the-box panels
 defaults = {
   "request"
-  "nginx"
+  "ngx"
   "router"
+  "console"
 }
 
 class LuminaryIndex extends require "luminary.views.base"
@@ -13,12 +16,12 @@ class LuminaryIndex extends require "luminary.views.base"
     panel\include_helper @
     panel
 
-  load_all: ->
+  load_all: (names) =>
     conf = {}
-    for i,name in ipairs defaults
+    for i,name in ipairs names
       panel = @load_panel "luminary.panels.#{name}"
-      selector = "#luminary-#{i}-#{slugify panel.name}"
-      insert conf, {:selector, panel.name, panel}
+      id = "luminary-#{i}-#{slugify panel.title or panel.__name or 'DefaultPanel'}"
+      insert(conf, {id, panel.title, panel})
     conf
 
   render_nav: (conf) =>
@@ -29,36 +32,24 @@ class LuminaryIndex extends require "luminary.views.base"
             text "Close Luminary >>"
 
         -- Create panel links with bootstrap data-toggle
-        for n,{selector,title,_obj} in ipairs conf
+        for n,c in ipairs conf
+          id,title = c[1], c[2]
           li class: (n == 1 and "active" or nil), ->
-            a href: tostring(selector), ["data-toggle"]: "tab", ->
+            a href: "##{id}", ["data-toggle"]: "tab", ->
               text tostring title
 
-  inner_content: =>
-    @render_nav {
-      {"#l-requestinfo", "Request"}
-      {"#l-routerinfo", "Router"}
-      {"#l-rawrequest", "Raw"}
-      {"#l-ngxinfo", "ngx_openresty"}
-      {"#l-lapisconsole", "Console!"}
-    }
-
+  render_panels: (panels) =>
     div id: "luminary-body", class: "col-md-10", ->
       div class: "tab-content", ->
-        div id: "l-requestinfo", class: "tab-pane active", ->
-          request_info = @load_panel "luminary.panels.request"
-          raw request_info\render_to_string!
+        for i,{id, title, panel} in ipairs panels
+          div id: "#{id}", class: "tab-pane #{i == 1 and 'active'}", ->
+            raw panel\render_to_string!
 
-        div id: "l-routerinfo", class: "tab-pane", ->
-          router_info = @load_panel "luminary.panels.router"
-          raw router_info\render_to_string!
 
-        div id: "l-rawrequest", class: "tab-pane", ->
-          pre "#{@}"
+  inner_content: =>
+    panels = @load_all defaults
 
-        div id: "l-ngxinfo", class: "tab-pane", ->
-          raw (require "luminary.panels.ngx_info")\render_to_string!
+    @render_nav panels
 
-        div id: "l-lapisconsole", class: "tab-pane", ->
-          raw require("luminary.views.console_tool")\render_to_string!
+    @render_panels panels
 
