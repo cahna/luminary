@@ -23,15 +23,20 @@ This project is meant to extend @leafo's work developing [Lapis](https://github.
 - [x] Add lapis console
 - [ ] Capture database queries
 - [ ] Handle rendering conditions from config
-- [ ] Capture & compile request stats
-- [ ] Remove bootstrap/jquery/all unnecessary dependencies
+- [ ] Allow user to create further entensions in the form of custom panels. Dynamically load panels. _in progress_
+- [ ] Capture & compile request stats _in progress_
+- [ ] Remove bootstrap/jquery/all unnecessary dependencies: http://css-tricks.com/dont-overthink-it-grids/
 - [ ] Write tests
 
 ## Dependencies ##
 
+Install via LuaRocks, MoonRocks, build into ngx-openresty, or manually include within your project.
+
 * jQuery \*
 * Twitter Bootstrap 3 \*
-* lapis-jshelper
+* lapis
+* lapis-console
+* lua-cjson
 
 \* Not included with this module, must be placed within your projects manually.
 
