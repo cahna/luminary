@@ -18,7 +18,7 @@ import Application, respond_to, capture_errors_json, assert_error, yield_error
 import assert_valid from require "lapis.validate"
 import run, make from require "lapis.console"
 
-class LuminaryConsoleApp extends Application
+class LuminaryRoutes extends Application
   @path: "/luminary"
   @name: "luminary_"
 

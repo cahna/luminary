@@ -2,7 +2,7 @@
 import slugify from require "lapis.util"
 import insert, concat from table
 
--- Out-of-the-box panels
+-- TODO: Add ability to override/extend defaults from config.moon
 defaults = {
   "request"
   "ngx"
