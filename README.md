@@ -25,7 +25,7 @@ This project is meant to extend @leafo's work developing [Lapis](https://github.
 - [x] Add lapis console
 - [ ] Capture database queries
 - [ ] Handle rendering conditions from config
-- [ ] Allow user to create further entensions in the form of custom panels. Dynamically load panels. _in progress_
+- [x] Allow extensions in the form of custom panels. Dynamically load panels.
 - [ ] Capture & compile request stats _in progress_
 - [ ] Remove bootstrap/jquery/all unnecessary dependencies: http://css-tricks.com/dont-overthink-it-grids/
 - [ ] Write tests
