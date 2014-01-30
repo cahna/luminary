@@ -11,8 +11,6 @@
 -- TODO: Enable respond_to "GET" if enabled in lapis config file
 -- 
 
-config = require"lapis.config".get!
-
 import Application, respond_to, capture_errors_json, assert_error, yield_error
   from require "lapis.application"
 import assert_valid from require "lapis.validate"
@@ -24,32 +22,27 @@ class LuminaryRoutes extends Application
 
   -- A path is needed for the console's AJAX to poke
   [console: "/console"]: respond_to {
-    GET: =>
-      -- TODO: Document config.moon usage
-      if config.luminary and config.luminary.enable_get
-        make! @
-      else
-        @write status: 404
+      GET: make!
 
-    POST: capture_errors_json =>
-      @params.lang or= "moonscript"
-      @params.code or= ""
+      POST: capture_errors_json =>
+        @params.lang or= "moonscript"
+        @params.code or= ""
 
-      assert_valid @params, {
-        { "lang", one_of: {"lua", "moonscript"} }
-      }
+        assert_valid @params, {
+          { "lang", one_of: {"lua", "moonscript"} }
+        }
 
-      if @params.lang == "moonscript"
-        moonscript = require "moonscript.base"
-        fn, err = moonscript.loadstring @params.code
+        if @params.lang == "moonscript"
+          moonscript = require "moonscript.base"
+          fn, err = moonscript.loadstring @params.code
 
-        if err
-          { json: { error: err } }
-        else
-          lines, queries = run @, fn
-          if lines
-            { json: { :lines, :queries } }
+          if err
+            { json: { error: err } }
           else
-            { json: { error: queries } }
+            lines, queries = run @, fn
+            if lines
+              { json: { :lines, :queries } }
+            else
+              { json: { error: queries } }
   }
 
