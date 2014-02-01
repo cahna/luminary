@@ -20,15 +20,26 @@ desireable and inviting environment for developers, and to help in debugging Lap
 ### Feature Requests / To-do List ###
 
 - [x] Add lapis console
-- [ ] Capture database queries
-- [ ] Handle rendering conditions from config
+- [x] Capture database queries
+- [ ] Handle rendering conditions from config _in progress_
 - [x] Allow extensions in the form of custom panels. Dynamically load panels.
 - [ ] Capture & compile request stats _in progress_
 - [ ] Remove bootstrap/jquery/all unnecessary dependencies: http://css-tricks.com/dont-overthink-it-grids/
 - [ ] Write tests
 - [ ] Capture log messages, errors, warnings, etc
 
-### Dependencies ###
+## Features ##
+
+* Included debug panels:
+  - Lapis request inspector
+  - Database query log (postgresql through `lapis.db`)
+  - Ngx_openresty build & configuration with lua(jit) environment information
+  - Router/dispatcher inspector
+  - Embedded lapis-console
+* Extensible - Easily override the default panels, or create panels specific to your needs
+* Limited to the "development" configuration environment
+
+## Dependencies ##
 
 Install via LuaRocks, MoonRocks, build into ngx-openresty, or clone this repo into the top-level directory of your project.
 
@@ -45,7 +56,8 @@ Luminary uses the Tup build system.
 
 ## Usage ##
 
-Install the Luminary rock or clone this repository into the top level of your project path. Luminary will return a table with 2 entries when `require`d by your application:
+Install the Luminary rock or clone this repository into the top level of your project path. 
+Luminary will return a table with 3 entries when `require`d by your application:
 
 ```moonscript
 require "moon.all"            -- Moonscript's p() function
@@ -61,14 +73,16 @@ luminary = {
     __name: "LuminaryRoutes"
     ...
   }
+  capture_queries: "function: 0x41x1aa10"
   render_toolbar: "function: 0x41x1ad30"
 }
 ```
 
 ### Application ###
 
-`luminary.routes` extends lapis.Application and must be included in your application for the 
-lapis-console hooks to work.
+`luminary.routes` (class) will create the routes needed for the included hooks into lapis-console to work.
+Currently, this is the only functionality provided by `luminary.routes`. If the `console` panel is
+disabled, then these routes are not necessary and should be omitted. 
 
 ```moonscript
 lapis = require "lapis"
@@ -80,11 +94,33 @@ lapis.serve class MyApp extends lapis.Application
   -- followed by the rest of your app
 ```
 
+### Database Queries ###
+
+`luminary.capture_queries(lapis_requst)` must be called as early in your application as possible to capture
+queries for each request. Putting this as the first line in your Application's `@before_filter` is 
+recommended. If you have disabled the `db` panel, this should be omitted.
+
+```moonscript
+import Application from require "lapis.application"
+
+luminary = require "luminary"
+
+class Cheffree extends Application
+  @include luminary.routes
+
+  layout: require "views.MyLayout"
+
+  @before_filter =>
+    -- Begin db query capture. Pass the request data with the call to `capture_queries`
+    luminary.capture_queries @
+
+  -- ...
+```
+
 ### Layout ###
 
-`luminary.render_toolbar(req)` is a function that will render the debug toolbar in your layout. 
-Since this is a manually-rendered widget, this function must be given the Lapis request, @, as 
-an argument so Luminary may access the request data.
+`luminary.render_toolbar(req)` will render the debug toolbar in your layout. This function must be given 
+the Lapis request, @, as its argument.
 
 ```moonscript
 import Widget from require "lapis.html"
@@ -120,7 +156,6 @@ class MyLayout extends Widget
 
         -- Render Luminary debug toolbar (must include that lapis request, @, as an argument)
         raw render_toolbar @
-
 ```
 
 ## Panels ##
