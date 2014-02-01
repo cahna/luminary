@@ -2,8 +2,9 @@
 config = require"lapis.config".get!
 
 import render_html from require "lapis.html"
+import insert, concat from table
 
--- This is totally a hack on how and lapis.Application handles @include(other_app)
+-- This is totally a hack on how Moonscript and lapis.Application handles @include(other_app)
 empty_routes =
   path: ""
   name: ""
@@ -12,9 +13,26 @@ empty_routes =
 empty_render = (...) ->
   return ""
 
+empty_capture = (...) ->
+  return
+
 if config._name == "development" and config.luminary and config.luminary.enable_console
   {
     routes: require "luminary.apps.main"
+
+    capture_queries: =>
+      @_luminary = {
+        queries: {}
+      }
+
+      db = require "lapis.db"
+      old_logger = db.get_logger!
+
+      db.set_logger {
+        query: (q) ->
+          insert @_luminary.queries, q
+          old_logger.query q if old_logger
+      }
 
     render_toolbar: (lapis_env) ->
       w = require "luminary.views.toolbar"
@@ -26,6 +44,7 @@ if config._name == "development" and config.luminary and config.luminary.enable_
 else
   {
     routes: empty_routes
+    capture_queries: empty_capture
     render_toolbar: empty_render
   }
 

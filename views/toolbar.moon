@@ -5,6 +5,7 @@ import insert, concat from table
 -- TODO: Add ability to override/extend defaults from config.moon
 defaults = {
   "request"
+  "db"
   "ngx"
   "router"
   "console"
