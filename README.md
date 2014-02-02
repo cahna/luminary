@@ -54,6 +54,12 @@ Install via LuaRocks, MoonRocks, build into ngx-openresty, or clone this repo in
 
 Luminary uses the Tup build system.
 
+## Privacy and Security Notice ##
+
+This toolbar should __never__ be exposed to a production/public-facing website. It will expose the entire configuration and
+environment of your server, display request contents (including passwords), and slow down your site. Luminary will
+restrict itself to the "development" environment by default.
+
 ## Usage ##
 
 Install the Luminary rock or clone this repository into the top level of your project path. 
@@ -111,7 +117,7 @@ class Cheffree extends Application
   layout: require "views.MyLayout"
 
   @before_filter =>
-    -- Begin db query capture. Pass the request data with the call to `capture_queries`
+    -- Begin db query capture. Pass the request data as the first argument to `capture_queries`
     luminary.capture_queries @
 
   -- ...
@@ -164,10 +170,12 @@ Each link in Luminary's navigation bar corresponds to an associated panel. A pan
 a lapis widget rendered as a tab within the toolbar. Luminary comes with several panels
 that are loaded by default:
 
-* __request__: lapis request data
-* __router__: lapis router information
+* __request__: Lapis request data
+* __router__: Lapis router information
+* __queries__: Database queries performed while serving request (pgsql through lapis.db)
 * __ngx__: OpenResty build information, server configuration, and Nginx variables
-* __console__: embedded lapis-console
+* __config__: Lapis environment configuration
+* __console__: Embedded lapis-console
 
 Since panels are just Lapis widgets, you can extend Luminary by creating your own panels filled
 with whatever debug information you want. Take a look at any of the panels in `luminary/panels/`
@@ -190,13 +198,12 @@ config {"development", "test"}, ->
   postgresql_url "postgres://#{pg.user}:#{pg.pass}@127.0.0.1/#{pg.db}"
 
   -- This example removes the default "ngx" panel
-  luminary {
-    panels: {
+  luminary ->
+    panels {
       "request"
       "router"
       "console"
     }
-  }
 ```
 
 Panels are loaded internally using something like:

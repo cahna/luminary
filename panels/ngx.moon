@@ -112,7 +112,7 @@ cmp_tuple_vals = (a,b) ->
   v1 < v2
 
 class NgxInfoPanel extends require "luminary.panels.base"
-  @title = "Nginx"
+  @title = "Ngx_openresty"
 
   content: =>
     ngx = require "ngx"

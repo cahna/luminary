@@ -8,6 +8,7 @@ defaults = {
   "db"
   "ngx"
   "router"
+  "config"
   "console"
 }
 

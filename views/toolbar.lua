@@ -13,6 +13,7 @@ local defaults = {
   "db",
   "ngx",
   "router",
+  "config",
   "console"
 }
 local LuminaryIndex
