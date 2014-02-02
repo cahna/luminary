@@ -48,6 +48,10 @@
         @extend pre;
         font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
       }
+
+      table .table {
+        margin-bottom:0;
+      }
     }
 
     #editor {

@@ -174,7 +174,7 @@ that are loaded by default:
 * __router__: Lapis router information
 * __queries__: Database queries performed while serving request (pgsql through lapis.db)
 * __ngx__: OpenResty build information, server configuration, and Nginx variables
-* __config__: Lapis environment configuration
+* __environment__: Lapis environment configuration
 * __console__: Embedded lapis-console
 
 Since panels are just Lapis widgets, you can extend Luminary by creating your own panels filled

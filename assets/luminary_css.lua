@@ -34,6 +34,8 @@ return [==[
       height: 100%; }
       #luminary #luminary-body .tab-content .luminary-data {
         font-family: Monaco, Menlo, Consolas, "Courier New", monospace; }
+      #luminary #luminary-body .tab-content table .table {
+        margin-bottom: 0; }
     #luminary #luminary-body #editor pre, #luminary #luminary-body #editor #luminary #luminary-body .tab-content .luminary-data, #luminary #luminary-body .tab-content #luminary #luminary-body #editor .luminary-data {
       background-color: transparent; }
 ]==]

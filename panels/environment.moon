@@ -5,7 +5,7 @@ import label_wrap, float_wrap from require "luminary.panels.util"
 import sort, concat from table
 
 class LapisEnvironmentPanel extends require "luminary.panels.base"
-  @title = "Lapis Env"
+  @title = "Lapis Environment"
 
   content: =>
     h1 ->
