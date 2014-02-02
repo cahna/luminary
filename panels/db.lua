@@ -5,7 +5,7 @@ do
 end
 local label_wrap, float_wrap
 do
-  local _obj_0 = require("luminary.panels.util")
+  local _obj_0 = require("luminary.util")
   label_wrap, float_wrap = _obj_0.label_wrap, _obj_0.float_wrap
 end
 local sort, concat

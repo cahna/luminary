@@ -1,7 +1,7 @@
 
 config = require"lapis.config".get!
 
-import label_wrap, float_wrap from require "luminary.panels.util"
+import label_wrap, float_wrap from require "luminary.util"
 import sort, concat from table
 
 class LapisEnvironmentPanel extends require "luminary.panels.base"

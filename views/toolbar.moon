@@ -2,14 +2,13 @@
 import slugify from require "lapis.util"
 import insert, concat from table
 
--- TODO: Add ability to override/extend defaults from config.moon
 defaults = {
-  "request"
-  "db"
-  "ngx"
-  "router"
-  "environment"
-  "console"
+  "luminary.panels.request"
+  "luminary.panels.db"
+  "luminary.panels.ngx"
+  "luminary.panels.router"
+  "luminary.panels.environment"
+  "luminary.panels.console"
 }
 
 class LuminaryIndex extends require "luminary.views.base"
@@ -21,7 +20,7 @@ class LuminaryIndex extends require "luminary.views.base"
   load_all: (names) =>
     conf = {}
     for i,name in ipairs names
-      panel = @load_panel "luminary.panels.#{name}"
+      panel = @load_panel name
       id = "luminary-#{i}-#{slugify panel.title or panel.__name or 'DefaultPanel'}"
       insert(conf, {id, panel.title, panel})
     conf

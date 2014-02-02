@@ -57,7 +57,7 @@ Luminary uses the Tup build system.
 ## Privacy and Security Notice ##
 
 This toolbar should __never__ be exposed to a production/public-facing website. It will expose the entire configuration and
-environment of your server, display request contents (including passwords), and slow down your site. Luminary will
+environment of your server, display request contents (including passwords), and impact your site's performance. Luminary will
 restrict itself to the "development" environment by default.
 
 ## Usage ##
@@ -170,12 +170,12 @@ Each link in Luminary's navigation bar corresponds to an associated panel. A pan
 a lapis widget rendered as a tab within the toolbar. Luminary comes with several panels
 that are loaded by default:
 
-* __request__: Lapis request data
-* __router__: Lapis router information
-* __queries__: Database queries performed while serving request (pgsql through lapis.db)
-* __ngx__: OpenResty build information, server configuration, and Nginx variables
-* __environment__: Lapis environment configuration
-* __console__: Embedded lapis-console
+* `luminary.panels.request`: Lapis request data
+* `luminary.panels.router`: Lapis router information
+* `luminary.panels.queries`: Database queries performed while serving request (pgsql through lapis.db)
+* `luminary.panels.ngx`: OpenResty build information, server configuration, and Nginx variables
+* `luminary.panels.environment`: Lapis environment configuration
+* `luminary.panels.console`: Embedded lapis-console
 
 Since panels are just Lapis widgets, you can extend Luminary by creating your own panels filled
 with whatever debug information you want. Take a look at any of the panels in `luminary/panels/`
@@ -197,21 +197,15 @@ config {"development", "test"}, ->
   session_name "MyApp"
   postgresql_url "postgres://#{pg.user}:#{pg.pass}@127.0.0.1/#{pg.db}"
 
-  -- This example removes the default "ngx" panel
+  -- This example removes all of the defaults except for the 'request' and 'router' panels
   luminary ->
     panels {
-      "request"
-      "router"
-      "console"
+      "luminary.panels.request"
+      "luminary.panels.router"
     }
 ```
 
-Panels are loaded internally using something like:
-
-```moonscript
-p = require "luminary.panels.#{panel_name}"
-p\include_helper @
-```
+Panels are loaded internally using their Lua path (much like Python Debug Toolbar's panel loading scheme)
 
 ### Creating Panels ###
 

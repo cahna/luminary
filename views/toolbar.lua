@@ -9,12 +9,12 @@ do
   insert, concat = _obj_0.insert, _obj_0.concat
 end
 local defaults = {
-  "request",
-  "db",
-  "ngx",
-  "router",
-  "environment",
-  "console"
+  "luminary.panels.request",
+  "luminary.panels.db",
+  "luminary.panels.ngx",
+  "luminary.panels.router",
+  "luminary.panels.environment",
+  "luminary.panels.console"
 }
 local LuminaryIndex
 do
@@ -28,7 +28,7 @@ do
     load_all = function(self, names)
       local conf = { }
       for i, name in ipairs(names) do
-        local panel = self:load_panel("luminary.panels." .. tostring(name))
+        local panel = self:load_panel(name)
         local id = "luminary-" .. tostring(i) .. "-" .. tostring(slugify(panel.title or panel.__name or 'DefaultPanel'))
         insert(conf, {
           id,
