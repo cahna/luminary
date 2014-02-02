@@ -16,9 +16,13 @@ empty_render = (...) ->
 empty_capture = (...) ->
   return
 
-if config._name == "development" and config.luminary and config.luminary.enable_console
+if config._name == "development"
   {
-    routes: require "luminary.apps.main"
+    routes: if config.luminary and config.luminary.enable_console == false
+        empty_routes
+      else
+        require "luminary.apps.main"
+
 
     capture_queries: =>
       @_luminary = {

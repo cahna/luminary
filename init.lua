@@ -20,9 +20,15 @@ empty_render = function(...)
 end
 local empty_capture
 empty_capture = function(...) end
-if config._name == "development" and config.luminary and config.luminary.enable_console then
+if config._name == "development" then
   return {
-    routes = require("luminary.apps.main"),
+    routes = (function()
+      if config.luminary and config.luminary.enable_console == false then
+        return empty_routes
+      else
+        return require("luminary.apps.main")
+      end
+    end)(),
     capture_queries = function(self)
       self._luminary = {
         queries = { }
