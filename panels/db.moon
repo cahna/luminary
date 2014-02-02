@@ -21,13 +21,19 @@ class DatabasePanel extends require "luminary.panels.base"
 
     if @_luminary
       if @_luminary.queries
+        n=0
         for i,q in ipairs @_luminary.queries
           @_luminary.queries[i] = format_query q
+          n+=1
 
-        @table_contents @_luminary.queries
+        if n>0
+          @table_contents @_luminary.queries
+        else
+          pre ->
+            text "No queries captured"
       else
         pre ->
-          text "No queries captured"
+          text "Query capture error!"
     else
       pre ->
         "Unable to capture queries. Did you add `luminary.capture_queries!` to your @before_filter? Check your configuration."
