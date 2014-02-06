@@ -18,6 +18,8 @@ empty_capture = (...) ->
 
 if config._name == "development"
   {
+    _VERSION: "alpha"
+
     routes: if config.luminary and config.luminary.enable_console == false
         empty_routes
       else

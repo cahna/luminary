@@ -22,6 +22,7 @@ local empty_capture
 empty_capture = function(...) end
 if config._name == "development" then
   return {
+    _VERSION = "alpha",
     routes = (function()
       if config.luminary and config.luminary.enable_console == false then
         return empty_routes

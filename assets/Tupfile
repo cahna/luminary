@@ -1,8 +1,5 @@
 include_rules
 
-root_dir = $(TUP_CWD)/../
-static_dir = $(root_dir)/static
-
 !pack = |> ^ pack %b > %o^ (echo 'return [==['; cat %f; echo ']==]' ) > %o |>
 
 # pack javascript

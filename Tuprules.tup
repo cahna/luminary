@@ -1,0 +1,6 @@
+root_dir = $(TUP_CWD)
+static_dir = $(root_dir)/static
+asset_dir = $(root_dir)/assets
+console_dir = $(root_dir)/console
+
+: foreach *.moon |> moonc %f |> %B.lua

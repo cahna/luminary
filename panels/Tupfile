@@ -1,1 +1,1 @@
-: foreach *.moon |> moonc %f |> %B.lua
+include_rules
