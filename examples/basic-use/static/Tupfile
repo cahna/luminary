@@ -1,0 +1,1 @@
+: foreach *.scss |> sass -C %f > %o |> %B.css

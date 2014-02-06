@@ -1,0 +1,5 @@
+# Forget lapis/openresty-specific stuff
+*_temp/*
+logs/*
+nginx.conf.compiled
+mime.types
