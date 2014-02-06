@@ -1,1 +1,5 @@
+# If building from within the luminary repository tree, this works
 include_rules
+
+# If the example folder is moved from the examples directory, add a Tuprules.tup with:
+# : foreach *.moon |> moonc %f |> %B.lua
