@@ -1,3 +1,6 @@
+# Don't include compiled Lua in examples
+*.lua
+
 # Forget lapis/openresty-specific stuff
 *_temp/*
 logs/*
