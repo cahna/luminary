@@ -115,6 +115,7 @@ do
   _base_0.__class = _class_0
   local self = _class_0
   self.title = "Panel Title"
+  self.subtitle = nil
   if _parent_0.__inherited then
     _parent_0.__inherited(_parent_0, _class_0)
   end

@@ -12,7 +12,15 @@ format_query = (q) ->
         raw q
 
 class DatabasePanel extends require "luminary.panels.base"
-  @title = "Queries"
+  @title = "Database"
+  
+  -- Nifty way to set the subtitle before rendering content
+  include_helper: (req, ...) =>
+    super req, ...
+    @subtitle = if req._luminary and req._luminary.queries
+      "#{#req._luminary.queries} queries"
+    else
+      "Error"
 
   content: =>
     -- luminary.capture_queries! must be called early in the app's request handling for queries to be captured

@@ -32,7 +32,6 @@ do
         local id = "luminary-" .. tostring(i) .. "-" .. tostring(slugify(panel.title or panel.__name or 'DefaultPanel'))
         insert(conf, {
           id,
-          panel.title,
           panel
         })
       end
@@ -55,8 +54,9 @@ do
               return text("Close Luminary >>")
             end)
           end)
-          for n, c in ipairs(conf) do
-            local id, title = c[1], c[2]
+          for n, _des_0 in ipairs(conf) do
+            local id, panel
+            id, panel = _des_0[1], _des_0[2]
             li({
               class = (n == 1 and "active" or nil)
             }, function()
@@ -64,7 +64,15 @@ do
                 href = "#" .. tostring(id),
                 ["data-toggle"] = "tab"
               }, function()
-                return text(tostring(title))
+                text((panel.title or panel.__name or "Panel " .. tostring(n)))
+                if panel.subtitle then
+                  raw("<br />")
+                  return span({
+                    class = "lnav-subtitle"
+                  }, function()
+                    return text(panel.subtitle)
+                  end)
+                end
               end)
             end)
           end
@@ -80,8 +88,8 @@ do
           class = "tab-content"
         }, function()
           for i, _des_0 in ipairs(panels) do
-            local id, title, panel
-            id, title, panel = _des_0[1], _des_0[2], _des_0[3]
+            local id, panel
+            id, panel = _des_0[1], _des_0[2]
             div({
               id = tostring(id),
               class = "tab-pane " .. tostring(i == 1 and 'active')

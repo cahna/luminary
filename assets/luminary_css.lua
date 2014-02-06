@@ -24,6 +24,11 @@ return [==[
     border: 0; }
   #luminary #luminary-nav {
     width: 15%; }
+    #luminary #luminary-nav li a .lnav-subtitle {
+      font-size: 0.6em;
+      color: #eee; }
+    #luminary #luminary-nav li:hover .lnav-subtitle, #luminary #luminary-nav li:active .lnav-subtitle {
+      color: #333; }
   #luminary #luminary-body {
     background: rgba(255, 255, 255, 0.8);
     width: 85%;

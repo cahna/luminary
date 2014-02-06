@@ -2,7 +2,6 @@
 import Widget from require "lapis.html"
 
 class LuminaryLayout extends Widget
-
   inner_content: =>
     raw "Overload me"
 

@@ -120,8 +120,18 @@ local NgxInfoPanel
 do
   local _parent_0 = require("luminary.panels.base")
   local _base_0 = {
+    include_helper = function(self, req, ...)
+      _parent_0.include_helper(self, req, ...)
+      if not (ngx) then
+        require("ngx")
+      end
+      if ngx and ngx.var then
+        self.subtitle = "Nginx " .. tostring(ngx.var.nginx_version) or "No Version"
+      else
+        self.subtitle = "Error"
+      end
+    end,
     content = function(self)
-      local ngx = require("ngx")
       local ngx_var
       do
         local _tbl_0 = { }

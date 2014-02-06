@@ -22,7 +22,7 @@ class LuminaryIndex extends require "luminary.views.base"
     for i,name in ipairs names
       panel = @load_panel name
       id = "luminary-#{i}-#{slugify panel.title or panel.__name or 'DefaultPanel'}"
-      insert(conf, {id, panel.title, panel})
+      insert(conf, {id, panel})
     conf
 
   render_nav: (conf) =>
@@ -33,16 +33,21 @@ class LuminaryIndex extends require "luminary.views.base"
             text "Close Luminary >>"
 
         -- Create panel links with bootstrap data-toggle
-        for n,c in ipairs conf
-          id,title = c[1], c[2]
+        for n,{id, panel} in ipairs conf
+          --id,title = c[1], c[2]
           li class: (n == 1 and "active" or nil), ->
             a href: "##{id}", ["data-toggle"]: "tab", ->
-              text tostring title
+              text (panel.title or panel.__name or "Panel #{n}")
+
+              if panel.subtitle
+                raw "<br />"
+                span class: "lnav-subtitle", ->
+                  text panel.subtitle
 
   render_panels: (panels) =>
     div id: "luminary-body", class: "col-md-10", ->
       div class: "tab-content", ->
-        for i,{id, title, panel} in ipairs panels
+        for i,{id, panel} in ipairs panels
           div id: "#{id}", class: "tab-pane #{i == 1 and 'active'}", ->
             raw panel\render_to_string!
 
@@ -51,6 +56,5 @@ class LuminaryIndex extends require "luminary.views.base"
     panels = @load_all defaults
 
     @render_nav panels
-
     @render_panels panels
 

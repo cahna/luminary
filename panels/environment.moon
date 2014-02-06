@@ -6,6 +6,7 @@ import sort, concat from table
 
 class LapisEnvironmentPanel extends require "luminary.panels.base"
   @title = "Lapis Environment"
+  @subtitle = config._name
 
   content: =>
     h1 ->

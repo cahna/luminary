@@ -31,7 +31,19 @@
   #luminary-nav {
     width:  15%;
 
-    a {}
+    li {
+      a {
+        .lnav-subtitle {
+          font-size: 0.6em;
+          color: #eee;
+        }
+      }
+      &:hover, &:active {
+        .lnav-subtitle {
+          color: #333;
+        }
+      }
+    }
   }
 
   #luminary-body {

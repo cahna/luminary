@@ -114,9 +114,18 @@ cmp_tuple_vals = (a,b) ->
 class NgxInfoPanel extends require "luminary.panels.base"
   @title = "Ngx_openresty"
 
-  content: =>
-    ngx = require "ngx"
+  include_helper: (req, ...) =>
+    super req, ...
+    
+    -- ngx is apparently always in the current global environment. Is this an openresty, lapis, or ngx-module thing?
+    require "ngx" unless ngx
 
+    @subtitle = if ngx and ngx.var
+        "Nginx #{ngx.var.nginx_version}" or "No Version"
+      else
+        "Error"
+
+  content: =>
     -- Copy ngx vars to local scope to avoid potential memory leaks with openresty requests
     ngx_var = { v, tostring(ngx.var[v] or "") for v in *ngx_vars }
 

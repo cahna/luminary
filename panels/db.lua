@@ -36,6 +36,14 @@ local DatabasePanel
 do
   local _parent_0 = require("luminary.panels.base")
   local _base_0 = {
+    include_helper = function(self, req, ...)
+      _parent_0.include_helper(self, req, ...)
+      if req._luminary and req._luminary.queries then
+        self.subtitle = tostring(#req._luminary.queries) .. " queries"
+      else
+        self.subtitle = "Error"
+      end
+    end,
     content = function(self)
       h1(function()
         return text("Queries")
@@ -92,7 +100,7 @@ do
   })
   _base_0.__class = _class_0
   local self = _class_0
-  self.title = "Queries"
+  self.title = "Database"
   if _parent_0.__inherited then
     _parent_0.__inherited(_parent_0, _class_0)
   end

@@ -3,6 +3,7 @@ import Widget from require "lapis.html"
 
 class PanelBase extends Widget
   @title = "Panel Title"
+  @subtitle = nil -- Optional subtitle
 
   content: =>
     h1 "Extend this class to create your own Luminary Panels!"
