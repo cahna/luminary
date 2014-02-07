@@ -29,8 +29,8 @@ Inspired by Django's debug toolbar, CakePHP's debugkit, and others.
 
 ## Screenshots ##
 
-![Request Panel Screenshot](tree/master/examples/screenshots/request-panel.jpg "Request Panel")
-![Console Panel Screenshot](tree/master/examples/screenshots/console-panel.jpg "Console Panel")
+![Request Panel Screenshot](https://github.com/cahna/luminary/blob/master/examples/screenshots/request-panel.jpg "Request Panel")
+![Console Panel Screenshot](https://github.com/cahna/luminary/blob/master/examples/screenshots/console-panel.jpg "Console Panel")
 
 ## Dependencies ##
 
