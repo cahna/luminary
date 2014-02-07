@@ -6,7 +6,6 @@ A visual debugging toolbar for Lapis websites written in Moonscript.
  
 Inspired by Django's debug toolbar, CakePHP's debugkit, and others.
 
-
 ### Goals ###
 
 1. Provide an intuitive, clean, lightweight debug module for moonscript applications (something you'd _want_ to use on every Lapis project)
@@ -27,6 +26,11 @@ Inspired by Django's debug toolbar, CakePHP's debugkit, and others.
   - Router/dispatcher inspector
   - Embedded lapis-console
 * Limited to the "development" configuration environment for safety and performance
+
+## Screenshots ##
+
+![Request Panel Screenshot](tree/master/examples/screenshots/request-panel.jpg "Request Panel")
+![Console Panel Screenshot](tree/master/examples/screenshots/console-panel.jpg "Console Panel")
 
 ## Dependencies ##
 
