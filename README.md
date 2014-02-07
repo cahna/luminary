@@ -4,11 +4,8 @@ Luminary
 
 A visual debugging toolbar for Lapis websites written in Moonscript.
  
-Inspired by CakePHP's debugkit, Django's debug toolbar, and others.
+Inspired by Django's debug toolbar, CakePHP's debugkit, and others.
 
-This project is meant to extend @leafo's work developing [Lapis](https://github.com/leafo/lapis) and 
-[Lapis-console](https://github.com/leafo/lapis-console), to make Lapis/Moonscript/OpenResty a more
-desireable and inviting environment for developers, and to help in debugging Lapis applications.
 
 ### Goals ###
 
@@ -17,42 +14,33 @@ desireable and inviting environment for developers, and to help in debugging Lap
 3. Allow further extension and customization of panels
 4. Include thorough documentation
 
-### Feature Requests / To-do List ###
-
-- [x] Add lapis console
-- [x] Capture database queries
-- [ ] Handle rendering conditions from config _in progress_
-- [x] Allow extensions in the form of custom panels. Dynamically load panels.
-- [ ] Capture & compile request stats _in progress_
-- [ ] Remove bootstrap/jquery/all unnecessary dependencies: http://css-tricks.com/dont-overthink-it-grids/
-- [ ] Write tests
-- [ ] Capture log messages, errors, warnings, etc
-
 ## Features ##
 
+* Inspect detailed request and response data from within a browser
+* Log SQL queries executed during a request (PostgreSQL only, currently, through `lapis.db`)
+* Use [lapis-console](https://github.com/leafo/lapis-console) directly from the overlayed toolbar panel, or access it through the included (but optional) `/luminary/console` route.
+* Extensible - Choose which panels to load, override/extend the default panels, or create panels specific to your needs
 * Included debug panels:
   - Lapis request inspector
   - Database query log (postgresql through `lapis.db`)
   - Ngx_openresty build & configuration with lua(jit) environment information
   - Router/dispatcher inspector
   - Embedded lapis-console
-* Extensible - Easily override the default panels, or create panels specific to your needs
-* Limited to the "development" configuration environment
+* Limited to the "development" configuration environment for safety and performance
 
 ## Dependencies ##
 
 Install via LuaRocks, MoonRocks, build into ngx-openresty, or clone this repo into the top-level directory of your project.
 
-* jQuery \*
-* Twitter Bootstrap 3 \*
 * lapis
 * lapis-console
 * lua-cjson
-* [Tup](http://gittup.org/tup/) (to build sources, optional)
+* jQuery \*
+* Twitter Bootstrap 3 \*
 
 \* Not included with this module, must be placed within your projects manually.
 
-Luminary uses the Tup build system.
+Luminary uses the [Tup](http://gittup.org/tup/) build system.
 
 ## Privacy and Security Notice ##
 
@@ -241,6 +229,10 @@ The `@title` class variable of a panel controls the link text shown on the Lumin
 Luminary will try to use the class name for the link. If an anonymous class is created with no title, then
 a generic title will be shown.
 
+## Other Notes ##
+
+* When `luminary.capture_routes @` is invoked within a `@before_filter()`, @\_luminary is created as a namespace to cache things throughout request processing. Currently, `luminary.panels.db` is the only panel to take advantage of this because it holds the captured queries for the request. It can be debated whether this is a good practice, or if this technically violates the standard Lua practice of never polluting a higher-level namespace. I don't find this to be a problem since I want to have minimal configuration as a feature, and because the request, `@`, is given as an argument (plus I'm documenting this behavior). This will remain until a better idea comes along.
+
 ## License ##
 
 Copyright (C) 2014 Conor Heine
@@ -252,15 +244,13 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-### Libraries included with Luminary ###
-
-* jQuery
-* CodeMirror
-* lapis-console
-
 ## Contact ##
 
 ```
 Author: Conor Heine <conor.heine@gmail.com>
 ```
+
+This project is meant to extend @leafo's work developing [Lapis](https://github.com/leafo/lapis) and 
+[Lapis-console](https://github.com/leafo/lapis-console), to make Lapis/Moonscript/OpenResty a more
+desireable and inviting environment for developers, and to assist in the development of Lapis applications.
 

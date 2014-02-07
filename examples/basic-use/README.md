@@ -2,7 +2,7 @@
 Luminary Basic Use Example
 ===
 
-Bare minimum working example of the Luminary debug toolbar.
+Minimum working example of the Luminary debug toolbar.
 
 This example builds upon the default output of `lapis new` by adding the Luminary
 toolbar with default panels (including the ability to capture SQL queries) to a 
