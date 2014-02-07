@@ -235,7 +235,7 @@ a generic title will be shown.
 
 ## Other Notes ##
 
-* When `luminary.capture_routes @` is invoked within a `@before_filter()`, @\_luminary is created as a namespace to cache things throughout request processing. Currently, `luminary.panels.db` is the only panel to take advantage of this because it holds the captured queries for the request. It can be debated whether this is a good practice, or if this technically violates the standard Lua practice of never polluting a higher-level namespace. I don't find this to be a problem since I want to have minimal configuration as a feature, and because the request, `@`, is given as an argument (plus I'm documenting this behavior). This will remain until a better idea comes along.
+* When `luminary.capture_routes @` is invoked within a `@before_filter()`, an `@\_luminary` table is created within the request table as a namespace to cache things throughout request processing. Currently, `luminary.panels.db` is the only panel to take advantage of this because it holds the captured queries for the request. It can be debated whether this is a good practice, or if this technically violates the standard Lua practice of never polluting a higher-level namespace. I don't find this to be a problem since I want to have minimal configuration as a feature, and because the request, `@`, is given as an argument (plus I'm documenting this behavior). This will remain until a better idea comes along.
 
 ## License ##
 
